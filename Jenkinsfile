@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main', 
                 url: 'https://github.com/your_username/your_laravel_app.git'
-                credentialsId: 'your-git-credentials'
+                // credentialsId: 'your-git-credentials'
             }
         }
 
