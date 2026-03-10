@@ -84,20 +84,20 @@ pipeline {
                 script {
                     // Останавливаем и удаляем старые контейнеры
                     sh '''
-                    docker-compose down --volumes --remove-orphans || true
+                    docker compose down --volumes --remove-orphans || true
                     '''
 
                     // Запускаем новые контейнеры
                     sh '''
-                    docker-compose up -d --build
+                    docker compose up -d --build
                     '''
 
                     // Выполняем миграции и оптимизацию
                     sh '''
-                    docker-compose exec app composer install --no-dev --optimize-autoloader
-                    docker-compose exec app php artisan optimize:clear
-                    docker-compose exec app php artisan optimize
-                    docker-compose exec app php artisan migrate --force
+                    docker compose exec app composer install --no-dev --optimize-autoloader
+                    docker compose exec app php artisan optimize:clear
+                    docker compose exec app php artisan optimize
+                    docker compose exec app php artisan migrate --force
                     '''
                 }
             }
