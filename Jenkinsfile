@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'your_dockerhub_username/laravel-app'
+        DOCKER_IMAGE = '3meenosez/laravel-app'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
         BUILD_NUMBER = "${env.BUILD_ID}"
     }
@@ -10,8 +10,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', 
-                url: 'https://github.com/your_username/your_laravel_app.git'
+                git branch: 'master', 
+                url: 'https://github.com/Nanstither/laravel-app.git'
                 // credentialsId: 'your-git-credentials'
             }
         }
