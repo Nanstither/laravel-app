@@ -56,17 +56,20 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    docker.image("${env.DOCKER_IMAGE}:${env.BUILD_NUMBER}").inside('--network=host') {
-                        // 👇 Устанавливаем ВСЕ зависимости (включая dev) для тестов
-                        sh 'composer install --optimize-autoloader'
-
+                    // Загрузите переменные из .env.production
+                    def envVars = readFile('.env.production').readLines().collectEntries { line ->
+                        if (line.trim() && !line.startsWith('#') && line.contains('=')) {
+                            def parts = line.split('=', 2)
+                            [(parts[0].trim()): parts[1].trim()]
+                        } else {
+                            [:]
+                        }
+                    }.findAll { it.value } // убрать пустые значения
+                    
+                    docker.image("${env.DOCKER_IMAGE}:${env.BUILD_NUMBER}").inside(envVars.collect { k, v -> "-e ${k}=${v}" }.join(' ')) {
                         sh 'php artisan config:clear'
-                        sh 'php artisan cache:clear'
-                        
                         sh 'php artisan migrate --force'
-                        
-                        // 👇 Теперь тесты будут работать
-                        sh 'php artisan test || echo "⚠️ Tests skipped or failed"'
+                        sh 'php artisan test'
                     }
                 }
             }
