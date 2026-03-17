@@ -58,7 +58,6 @@ pipeline {
                 script {
                     docker.image("${env.DOCKER_IMAGE}:${env.BUILD_NUMBER}").inside('--network=host') {
                         // 👇 Устанавливаем ВСЕ зависимости (включая dev) для тестов
-                        sh 'docker compose exec -T app git config --global --add safe.directory /var/www/html'
                         sh 'composer install --optimize-autoloader'
                         
                         sh 'php artisan migrate --force'
