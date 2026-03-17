@@ -18,7 +18,7 @@ services:
     container_name: laravel_webserver
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8084:80"
     volumes:
       - .:/var/www/html
       - ./nginx/conf.d:/etc/nginx/conf.d
