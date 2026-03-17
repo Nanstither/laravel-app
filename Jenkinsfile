@@ -82,23 +82,16 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 script {
-                    // Останавливаем и удаляем старые контейнеры
-                    sh '''
-                    docker compose down --volumes --remove-orphans || true
-                    '''
-
-                    // Запускаем новые контейнеры
-                    sh '''
-                    docker compose up -d --build
-                    '''
-
-                    // Выполняем миграции и оптимизацию
-                    sh '''
-                    docker compose exec app composer install --no-dev --optimize-autoloader
-                    docker compose exec app php artisan optimize:clear
-                    docker compose exec app php artisan optimize
-                    docker compose exec app php artisan migrate --force
-                    '''
+                    // 🔹 Останавливаем старые контейнеры
+                    sh 'docker compose down --volumes --remove-orphans || true'
+                    
+                    // 🔹 Запускаем новые (без --build, образ уже собран и запушен!)
+                    sh 'docker compose up -d'
+                    
+                    // 🔹 Выполняем только миграции (зависимости уже в образе!)
+                    sh 'docker compose exec app php artisan migrate --force'
+                    sh 'docker compose exec app php artisan optimize:clear'
+                    sh 'docker compose exec app php artisan optimize'
                 }
             }
         }
