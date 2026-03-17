@@ -17,6 +17,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Установка PHP расширений
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
+RUN git config --global --add safe.directory /var/www/html
+
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
