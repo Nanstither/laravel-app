@@ -9,15 +9,15 @@ services:
     depends_on:
       - db
 
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - laravel_network
+  # db:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_DATABASE: ${DB_DATABASE}
+  #   volumes:
+  #     - dbdata:/var/lib/mysql
+  #   networks:
+  #     - laravel_network
 
   webserver:
     image: nginx:alpine
