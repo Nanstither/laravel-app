@@ -16,17 +16,17 @@ pipeline {
             }
         }
 
-        stage('Setup Environment') {
-            steps {
-                script {
-                    // Копируем production .env
-                    sh 'cp .env.production .env'
+        // stage('Setup Environment') {
+        //     steps {
+        //         script {
+        //             // Копируем production .env
+        //             sh 'cp .env.production .env'
                     
-                    // Генерируем APP_KEY если нужно
-                    sh 'docker run --rm -v $(pwd):/app -w /app php:8.2-cli php artisan key:generate --force --no-interaction'
-                }
-            }
-        }
+        //             // Генерируем APP_KEY если нужно
+        //             sh 'docker run --rm -v $(pwd):/app -w /app php:8.2-cli php artisan key:generate --force --no-interaction'
+        //         }
+        //     }
+        // }
 
         stage('Build Docker Images') {
             steps {
