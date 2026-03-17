@@ -61,7 +61,7 @@ pipeline {
                         sh 'composer install --optimize-autoloader'
 
                         sh 'php artisan config:clear'
-                        sh 'php artisan cache:clear
+                        sh 'php artisan cache:clear'
                         
                         sh 'php artisan migrate --force'
                         
