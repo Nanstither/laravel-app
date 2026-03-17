@@ -9,10 +9,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    libzip-dev
-
-# Очистка кеша
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    libzip-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Установка PHP расширений
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -21,14 +19,14 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Создание пользователя для приложения
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+RUN groupadd -g 1000 www && \
+    useradd -u 1000 -ms /bin/bash -g www www
 
-# Копирование кода приложения
-COPY . /var/www/html
-
-# Копирование существующих прав доступа к приложению
+# Копирование кода приложения С ПРАВИЛЬНЫМИ ПРАВАМИ (одна команда!)
 COPY --chown=www:www . /var/www/html
+
+# Настройка безопасной директории для Git
+RUN git config --global --add safe.directory /var/www/html
 
 # Смена пользователя
 USER www
@@ -36,6 +34,8 @@ USER www
 # Рабочая директория
 WORKDIR /var/www/html
 
-# Expose port 9000 and start php-fpm server
+# Установка зависимостей НА ЭТАПЕ СБОРКИ (не при деплое!)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
 EXPOSE 9000
 CMD ["php-fpm"]
