@@ -59,6 +59,9 @@ pipeline {
                     docker.image("${env.DOCKER_IMAGE}:${env.BUILD_NUMBER}").inside('--network=host') {
                         // 👇 Устанавливаем ВСЕ зависимости (включая dev) для тестов
                         sh 'composer install --optimize-autoloader'
+
+                        sh 'php artisan config:clear'
+                        sh 'php artisan cache:clear
                         
                         sh 'php artisan migrate --force'
                         
