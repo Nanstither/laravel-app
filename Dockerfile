@@ -25,6 +25,8 @@ RUN groupadd -g 1000 www && \
 # Копирование кода приложения С ПРАВИЛЬНЫМИ ПРАВАМИ (одна команда!)
 COPY --chown=www:www . /var/www/html
 
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
 # Настройка безопасной директории для Git
 RUN git config --global --add safe.directory /var/www/html
 
